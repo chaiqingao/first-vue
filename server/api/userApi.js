@@ -21,16 +21,23 @@ var jsonWrite = function(res, ret) {
 }
 
 //增加用户接口
-router.post('/addUser',(req, res) => {
-    var sql = $sql.user.add;
+router.post('/login',(req, res) => {
+    var sql = $sql.user.select;
     var params = req.body;
     console.log(params);
-    conn.query(sql, [params.userName, params.age], function(err,result) {
+    conn.query(sql, [params.account], function(err,result) {
         if (err) {
             console.log(err);
         }
         if (result) {
-            jsonWrite(res,result);
+            //console.log(result.body.password===params.password);
+            if (result.length === 0) {
+                jsonWrite(res, 0)
+            } else if (result[0].password === params.password) {
+                jsonWrite(res, 1)
+            } else {
+                jsonWrite(res, -1);
+            }
         }
     });
 });

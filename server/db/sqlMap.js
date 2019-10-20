@@ -1,6 +1,6 @@
 var sqlMap = {
     user: {
-        add: 'insert into user(id, name, age) values(0,?,?)',
+        select: 'select * from user where account = ?'
     }
 }
 

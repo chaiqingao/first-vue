@@ -1,10 +1,10 @@
 <template>
   <div class="hello">
-    <h1>{{message}}</h1>
+    <h1>{{messpassword}}</h1>
     <form >
-      <input type="text" name="username" v-model="userName"> <br>
-      <input type="text" name="age" v-model="age"> <br>
-      <a href="javascript:;" @click="addUser">提交</a>
+      <label for="">手机号</label><input type="text" name="account" v-model="account"> <br>
+      <label for="">密码</label><input type="text" name="password" v-model="password"> <br>
+      <button @click="login">登录</button>
     </form>
   </div>
 </template>
@@ -14,21 +14,33 @@
     name: 'hello',
     data() {
       return {
-        message: '欢迎使用！',
-        userName: '',
-        age: ''
+        messpassword: '欢迎使用！',
+        account: '',
+        password: ''
       }
     },
     methods: {
-      addUser() {
-        var name = this.userName;
-        var age = this.age;
-        this.$http.post('/api/user/addUser', {
-          userName: name,
-          age: age
+      login() {
+        var name = this.account;
+        var password = this.password;
+        var md5 = require("blueimp-md5");
+        this.$http.post('/api/user/login', {
+          account: name,
+          password: md5(password)
         },{}).then((response) => {
           /* eslint-disable no-console */
-          console.log(response);
+          switch (response.body) {
+            case 1:
+              alert("登录成功");
+              window.location.href="http://baidu.com";
+              break;
+            case -1:
+              alert("密码错误");
+              break;
+            default:
+              alert("用户不存在");
+              break;
+          }
         })
       }
     }
@@ -43,5 +55,10 @@
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+}
+.hello {
+  background-color: rgb(238, 238, 238);
+  color: rgb(255, 192, 163);
+  text-align: center;
 }
 </style>
