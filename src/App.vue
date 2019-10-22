@@ -1,11 +1,9 @@
 <template>
   <div class="hello">
     <h1>{{messpassword}}</h1>
-    <form >
-      <label for="">手机号</label><input type="text" name="account" v-model="account"> <br>
-      <label for="">密码</label><input type="text" name="password" v-model="password"> <br>
-      <button @click="login">登录</button>
-    </form>
+    <el-amap id="AMapDemo">
+
+    </el-amap>
   </div>
 </template>
 
@@ -60,5 +58,10 @@
   background-color: rgb(238, 238, 238);
   color: rgb(255, 192, 163);
   text-align: center;
+}
+
+#AMapDemo {
+  height: 500px;
+  width: 100%;
 }
 </style>
