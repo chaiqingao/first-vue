@@ -1,6 +1,6 @@
 var sqlMap = {
-    user: {
-        select: 'select * from user where account = ?'
+    point: {
+        getNext: 'select * from point where time > ? order by time limit 1'
     }
 }
 

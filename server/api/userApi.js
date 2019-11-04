@@ -4,7 +4,8 @@ var express = require('express');
 var router = express.Router();
 var mysql = require('mysql');
 var $sql = require('../db/sqlMap');
-
+var fs = require("fs");
+var moment = require("moment");
 var conn = mysql.createConnection(models.mysql);
 
 conn.connect();
@@ -20,26 +21,23 @@ var jsonWrite = function(res, ret) {
     }
 }
 
-//增加用户接口
-router.post('/login',(req, res) => {
-    var sql = $sql.user.select;
+//查询下一个点
+router.post('/getNextPoint',(req, res) => {
+    var sql = $sql.point.getNext;
     var params = req.body;
-    console.log(params);
-    conn.query(sql, [params.account], function(err,result) {
+    conn.query(sql, [params.time], function(err, result) {
         if (err) {
             console.log(err);
         }
-        if (result) {
-            //console.log(result.body.password===params.password);
-            if (result.length === 0) {
-                jsonWrite(res, 0)
-            } else if (result[0].password === params.password) {
-                jsonWrite(res, 1)
-            } else {
-                jsonWrite(res, -1);
-            }
+        if(result&&result.length) {
+            var imgUrl = result[0].img;
+            var imageData = fs.readFileSync("E:\\della\\Desktop\\first-vue\\server"+imgUrl); // 例：fileUrl="D:\\test\\test.bmp"
+            var imageBase64 = imageData.toString("base64");
+            result[0].img = imageBase64;
+            result[0].time = moment(result[0].time).format("YYYY-MM-DD");
+            jsonWrite(res,result[0]);
+            console.log(result[0].time)
         }
-    });
-});
-
+    })
+})
 module.exports = router;

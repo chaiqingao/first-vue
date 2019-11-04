@@ -4,6 +4,6 @@ module.exports = {
         port: '3306',
         user: 'root',
         password: 'peekab00',
-        database: 'userInfo'
+        database: 'history'
     }
 }
