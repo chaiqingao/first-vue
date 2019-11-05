@@ -1,6 +1,6 @@
 var sqlMap = {
     point: {
-        getNext: 'select * from point where time > ? order by time limit 1'
+        getNext: 'select * from point where startTime > ? order by startTime limit 1'
     }
 }
 

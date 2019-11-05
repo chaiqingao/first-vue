@@ -1,12 +1,9 @@
 <template>
   <div class="hello">
-    <h1>{{msg}}</h1>
-    <button v-on:click="drawAll">Greet</button>
     <el-amap vid="AMapDemo" :amap-manager="amapManager" :events="mapEvents" class="amap-demo">
         <el-amap-marker v-for="(marker, index) in markers" :position="marker.position" :events="marker.events" onclick="marker.windowVisible=true" :visible="marker.visible" :draggable="marker.draggable" :vid="index"></el-amap-marker>
     </el-amap>
   </div>
-
 </template>
 
 <script>
@@ -27,12 +24,23 @@
         }
     })
     var infoWindow;
-    function openInfo(img, name, position) {
+    function openInfo(name, startTime, endTime, img, details, position) {
         //构建信息窗体中显示的内容
-        var content = "<div><h1>"+name+"</h1><img src=data:image/bmp;base64,"+img+" alt=\"哈哈\" width=\"200px\"></div>"
+        //var content = "<div><h1>"+name+"</h1><img src=data:image/bmp;base64,"+img+" alt=\"哈哈\" width=\"200px\"></div>"
+        console.log(startTime);
+        console.log(endTime);
+        var info ="<div id=\"card\">\
+        <p id=\"name\">"+name+"</p>"+
+        (startTime===endTime?"<p id=\"time\">"+startTime+"</p>":"<p id=\"time\">"+startTime+"-"+endTime+"</p>")+
+        "<img src=data:image/bmp;base64,"+img+" alt=\"图片加载失败\" width=\"300px\">\
+        <p id=\"details\">"+details+"</p></div>\
+        <style>#card{color: rgb(255, 0, 0);text-align: center;width: 300px}\
+        #name{color: #c04851;text-align: left;font-size: 25px;margin-block-start: 0em;margin-block-end: 0em;}\
+        #time{color: #fc8c23;text-align: right;margin-block-start: 0em;margin-block-end: 0em;}\
+        #details{color: rgb(0,0,0);text-align: left;font-size:15px}</style>";
         
         infoWindow = new AMap.InfoWindow({
-            content: content  //使用默认信息窗体框样式，显示信息内容
+            content: info  //使用默认信息窗体框样式，显示信息内容
         });
         var map = amapManager.getMap();
         infoWindow.open(map, position);
@@ -101,7 +109,7 @@
         },
         beforeMount() {
             var self = this;
-            setInterval(getNextPoint,10000)
+            setInterval(getNextPoint,500)
             function getNextPoint() {
                 self.$http.post('api/point/getNextPoint',{
                     time:self.currentTime
@@ -112,7 +120,7 @@
                     geocoder.getLocation(address, function(status, result) {
                         if (status === 'complete'&&result.geocodes.length) {
                             var lnglat = result.geocodes[0].location
-                            openInfo(res.img, res.name, lnglat);
+                            openInfo(res.event, res.startTime, res.endTime, res.img, res.details, lnglat);
                             self.currentTime = res.time;
                         }else{
                             console.log('查询失败');
@@ -154,6 +162,6 @@
     }
     #AMapDemo {
         width: 100%;
-        height: 800px;
+        height: 600px;
     }
 </style>

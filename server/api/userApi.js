@@ -30,13 +30,14 @@ router.post('/getNextPoint',(req, res) => {
             console.log(err);
         }
         if(result&&result.length) {
-            var imgUrl = result[0].img;
+            var imgUrl = result[0].imgUrl;
             var imageData = fs.readFileSync("E:\\della\\Desktop\\first-vue\\server"+imgUrl); // 例：fileUrl="D:\\test\\test.bmp"
             var imageBase64 = imageData.toString("base64");
             result[0].img = imageBase64;
-            result[0].time = moment(result[0].time).format("YYYY-MM-DD");
+            result[0].startTime = moment(result[0].startTime).format("YYYY-MM-DD");
+            result[0].endTime = moment(result[0].endTime).format("YYYY-MM-DD");
             jsonWrite(res,result[0]);
-            console.log(result[0].time)
+            console.log(result[0].startTime)
         }
     })
 })
