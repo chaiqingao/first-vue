@@ -1,9 +1,13 @@
 <template>
-  <div class="hello">
-    <el-amap vid="AMapDemo" :amap-manager="amapManager" :events="mapEvents" class="amap-demo">
-        <el-amap-marker v-for="(marker, index) in markers" :position="marker.position" :events="marker.events" onclick="marker.windowVisible=true" :visible="marker.visible" :draggable="marker.draggable" :vid="index"></el-amap-marker>
-    </el-amap>
-  </div>
+    <div class="hello">
+        <el-amap vid="AMapDemo" :amap-manager="amapManager" :events="mapEvents" class="amap-demo">
+            <el-amap-marker v-for="(marker, index) in markers" :position="marker.position" :events="marker.events" onclick="marker.windowVisible=true" :visible="marker.visible" :draggable="marker.draggable" :vid="index"></el-amap-marker>
+        </el-amap>
+        <div id="info-panel" class="scrollbar1">
+            <ul id="info-list">
+            </ul>
+        </div>
+    </div>
 </template>
 
 <script>
@@ -24,14 +28,12 @@
         }
     })
     var infoWindow;
-    function openInfo(name, startTime, endTime, img, details, position) {
+    function openInfo(name, startTime, endTime, img, details, moreUrl, position) {
         //构建信息窗体中显示的内容
-        //var content = "<div><h1>"+name+"</h1><img src=data:image/bmp;base64,"+img+" alt=\"哈哈\" width=\"200px\"></div>"
-        console.log(startTime);
-        console.log(endTime);
+        "12456".substr(0,255);
         var info ="<div id=\"card\">\
         <p id=\"name\">"+name+"</p>"+
-        (startTime===endTime?"<p id=\"time\">"+startTime+"</p>":"<p id=\"time\">"+startTime+"-"+endTime+"</p>")+
+        (startTime===endTime?"<p id=\"time\">"+startTime+"</p>":"<p id=\"time\">"+startTime+"至"+endTime+"</p>")+
         "<img src=data:image/bmp;base64,"+img+" alt=\"图片加载失败\" width=\"300px\">\
         <p id=\"details\">"+details+"</p></div>\
         <style>#card{color: rgb(255, 0, 0);text-align: center;width: 300px}\
@@ -109,7 +111,7 @@
         },
         beforeMount() {
             var self = this;
-            setInterval(getNextPoint,500)
+            setInterval(getNextPoint,5000)
             function getNextPoint() {
                 self.$http.post('api/point/getNextPoint',{
                     time:self.currentTime
@@ -118,17 +120,32 @@
                     var geocoder = new AMap.Geocoder();
                     var address  = res.address;
                     geocoder.getLocation(address, function(status, result) {
-                        if (status === 'complete'&&result.geocodes.length) {
-                            var lnglat = result.geocodes[0].location
-                            openInfo(res.event, res.startTime, res.endTime, res.img, res.details, lnglat);
-                            self.currentTime = res.time;
+                        if (status === 'complete'&&result.geocodes.length||address==="莫斯科") {
+                            if(address==="莫斯科") {
+                                var lnglat = {
+                                    P: 55.75074,
+                                    Q: 37.61702,
+                                    lng: 37.61702,
+                                    lat: 55.75074
+                                }
+                            } else {
+                                var lnglat = result.geocodes[0].location;
+                            }
+                            console.log(lnglat);
+                            openInfo(res.event, res.startTime, res.endTime, res.img, res.details, res.moreUrl, lnglat);
+                            self.currentTime = res.startTime;
                         }else{
-                            console.log('查询失败');
+                            console.log('查询失败：'+address);
                         }
                     });
                 })
             }
             //getNextPoint();
+            document.getElementById("timeLine").innerHTML="<ul id=\"yearList\">\
+            <li>1921年7月23日<i class=\"year-dot\"></i></li>\
+            <li>1922年7月16日<i class=\"year-dot\"></i></li>\
+            <li>1923年6月12日<i class=\"year-dot\"></i></li>\
+        </ul>";
         },
         mounted() {
             
@@ -161,7 +178,20 @@
         text-align: center;
     }
     #AMapDemo {
+        position: relative;
+        height: 900px;
         width: 100%;
-        height: 600px;
+    }
+    #info-panel {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        right: 0;
+        height: 100%;
+        overflow: auto;
+        width: 300px;
+        z-index: 999;
+        border-left: 1px solid #eaeaea;
+        background: #fff;
     }
 </style>
