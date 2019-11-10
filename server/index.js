@@ -8,7 +8,7 @@ const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 
-app.use('/api/point',userApi);
+app.use('/api/events',userApi);
 
 app.listen(3000);
 

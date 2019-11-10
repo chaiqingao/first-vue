@@ -27,7 +27,7 @@
             opt.conBox=$(opt.conBox);
             opt.conArr=$(opt.conArr);
             var liNum=opt.conArr.length;
-           
+
             opt.conArr.each(function(i){
                 $(this).css("left",opt.w*i+"px");
             })
@@ -48,10 +48,9 @@
             setInterval(function(){
                 if(opt.n<liNum){
                     opt.n++;
-                    (opt.n>=liNum)&&(opt.n=0);
                     updata();
                 }
-            },5000)
+            },2000)
             function updata(){
                 //opt.conBox.animate({left:-(opt.w*opt.n)+'px'},300);
                 opt.dateBox.animate({left:-((130)*opt.n)+'px'},300);

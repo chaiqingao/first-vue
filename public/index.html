@@ -6,7 +6,9 @@
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <link rel="icon" href="<%= BASE_URL %>favicon.ico">
     <script type="text/javascript" src="https://webapi.amap.com/maps?v=1.4.15&key=187cfeab9b9b174274958124e91c1d22&plugin=Map3D,AMap.DistrictLayer,AMap.Scale,AMap.ToolBar,AMap.Geocoder"></script> 
+    <script src="//webapi.amap.com/ui/1.0/main.js?v=1.0.11"></script>
     <link rel="stylesheet" href="css/timeline.css">
+    <link href="css/bootstrap-4.2.1.css" rel="stylesheet" type="text/css">
     <title>first-vue</title>
   </head>
   <body>
@@ -16,43 +18,13 @@
     <div id="app"></div>
     <div id="timeLine">
         <ul id="yearList">
-            <li>1921年7月23日<i class="year-dot"></i></li>
-            <li>1922年7月16日<i class="year-dot"></i></li>
-            <li>1923年6月12日<i class="year-dot"></i></li>
-            <li>1924年5月1日<i class="year-dot"></i></li>
-            <li>1921年7月23日<i class="year-dot"></i></li>
-            <li>1922年7月16日<i class="year-dot"></i></li>
-            <li>1923年6月12日<i class="year-dot"></i></li>
-            <li>1924年5月1日<i class="year-dot"></i></li>
-            <li>1921年7月23日<i class="year-dot"></i></li>
-            <li>1922年7月16日<i class="year-dot"></i></li>
-            <li>1923年6月12日<i class="year-dot"></i></li>
-            <li>1924年5月1日<i class="year-dot"></i></li>
-            <li>1921年7月23日<i class="year-dot"></i></li>
-            <li>1922年7月16日<i class="year-dot"></i></li>
-            <li>1923年6月12日<i class="year-dot"></i></li>
-            <li>1924年5月1日<i class="year-dot"></i></li>
-            <li>1921年7月23日<i class="year-dot"></i></li>
-            <li>1922年7月16日<i class="year-dot"></i></li>
-            <li>1923年6月12日<i class="year-dot"></i></li>
-            <li>1924年5月1日<i class="year-dot"></i></li>
         </ul>
     </div>
     <div class="dotted-line"></div>
     <script type="text/javascript" src="js/jquery.min.js"></script>
     <script type="text/javascript" src="js/jquery-timeLine.js"></script>
     <script type="text/javascript">
-    $(function(){
-      $("#timeLine").timeLine({
-        w:850  //每一个li的宽度
-    //            btnPrev:"#btnLeft",      //上一个按钮
-    //            btnNext: "#btnRight",  //下一个按钮
-    //            dateBox:"#yearList", //日期的ul盒子
-    //            dateArr: "#yearList li", //保存每一个日期的数组
-    //            conBox:"#cUl",  //保存切换内容的ul盒子
-    //            conArr:"#cUl li" //保存每一个内容的数
-      });
-    });
+    
     </script>
     <!-- built files will be auto injected -->
   </body>
