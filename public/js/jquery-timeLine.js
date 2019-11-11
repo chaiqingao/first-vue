@@ -53,7 +53,7 @@
             },2000)
             function updata(){
                 //opt.conBox.animate({left:-(opt.w*opt.n)+'px'},300);
-                opt.dateBox.animate({left:-((130)*opt.n)+'px'},300);
+                opt.dateBox.animate({left:-((150)*opt.n)+'px'},300);
                 $(opt.dateArr[opt.n]).addClass("year-active").siblings().removeClass("year-active");
             }
         });
