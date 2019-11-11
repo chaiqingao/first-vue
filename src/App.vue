@@ -1,12 +1,12 @@
 <template>
     <div class="hello">
-        <el-amap vid="AMapDemo" :amap-manager="amapManager" :events="mapEvents" class="amap-demo">
+        <el-amap vid="AMapDemo" :amap-manager="amapManager" :events="mapEvents" :zoom="zoom" class="amap-demo">
             <el-amap-marker v-for="(marker, index) in markers" :position="marker.position" :events="marker.events" :title="marker.title" :icon="marker.icon" :visible="marker.visible" :draggable="marker.draggable" :vid="index"></el-amap-marker>
             <el-amap-marker :position="marker.position" :icon="marker.icon"></el-amap-marker>
         </el-amap>
         <div id="info-panel" class="scrollbar1">
             <h1 style="font-family: '楷体'; text-align: center">大事记</h1>
-            <div style="text-align:center"><input type="text"><button>查询</button></div>
+            <!--<div style="text-align:center"><input type="text"><button type="button" class="btn btn-info">搜索</button></div><br>-->
             <ul id="info-list">
             </ul>
         </div>
@@ -55,6 +55,7 @@
             return {
                 msg: "历史",
                 amapManager,
+                zoom: 4,
                 mapEvents: {
                     init(o) {
                         disCountry.setMap(o);
@@ -92,7 +93,7 @@
                     {"adcode":"150000","red":false,"name":"内蒙古"},
                     {"adcode":"120000","red":false,"name":"天津"},
                     {"adcode":"620000","red":false,"name":"甘肃"},
-                    {"adcode":"610000","red":false,"name":"甘肃"},
+                    {"adcode":"610000","red":false,"name":"陕西"},
                     {"adcode":"710000","red":false,"name":"台湾"},
                     {"adcode":"810000","red":false,"name":"香港"},
                     {"adcode":"820000","red":false,"name":"澳门"}
@@ -112,6 +113,7 @@
                 self.$http.post('api/events/getNextPoint',{
                     time:self.currentTime
                 },{}).then((response) => {
+                    self.marker.position = [];
                     var res = response.body;
                     var event = res.event;
                     if (event.substr(0,2)=== "解放") {
@@ -128,13 +130,13 @@
                                 var lnglat = result.geocodes[0].location;
                                 var marker = {
                                     position: [lnglat.lng, lnglat.lat],
-                                    vivible: true,
+                                    visible: true,
                                     title: res.event,
                                     icon: "./img/五星.png",
                                     draggable: false,
                                     events: {
                                         click: () => {
-                                            alert('click marker');
+                                            
                                         }
                                     }
                                 }
@@ -147,7 +149,7 @@
                         var geocoder = new AMap.Geocoder();
                         var address  = res.address;
                         geocoder.getLocation(address, function(status, result) {
-                            if (status === 'complete'&&result.geocodes.length||address==="莫斯科") {
+                            if (status === 'complete'&&result.geocodes.length||address==="莫斯科"||address === "日本") {
                                 if(address==="莫斯科") {
                                     var lnglat = {
                                         P: 55.75074,
@@ -155,7 +157,15 @@
                                         lng: 37.61702,
                                         lat: 55.75074
                                     }
-                                } else {
+                                } else if(address==="日本") {
+                                    var lnglat = {
+                                        P: 35.6828387,
+                                        Q: 139.7594549,
+                                        lng: 139.7594549,
+                                        lat: 35.6828387
+                                    }
+                                }
+                                else {
                                     var lnglat = result.geocodes[0].location;
                                 }
                                 //openInfo(res.event, res.startTime, res.endTime, res.img, res.details, res.moreUrl, lnglat);
@@ -166,8 +176,9 @@
                                 <img src=data:image/bmp;base64,"+res.img+" alt=\"Avatar\" style=\"width:100%\">\
                                 <div class=\"container\">\
                                     <h3><b>"+res.event+"</b></h3> \
-                                    <h6 align=\"right\" style=\"color: #D91C1F\">"+(startTime===endTime?"<p id=\"time\">"+startTime+"</p>":"<p id=\"time\">"+startTime+"至"+endTime+"</p>")+"</h6>\
-                                    <p>"+res.details+"</p><button onClick=\"baidu\" type=\"button\" class=\"btn btn-link\"><a href=\""+res.moreUrl+ "\"target=\"_blank\">阅读更多</a></button>\
+                                    <h6 align=\"right\" style=\"color: #D91C1F\"><img src=\"./img/日期.png\" width=20 height=20>"+(startTime===endTime?startTime:startTime+"至"+endTime)+"</h6>\
+                                    <p>"+res.details+"</p>\
+                                    <div align=\"right\"><button onClick=\"baidu\" type=\"button\" class=\"btn btn-link\"><a href=\""+res.moreUrl+ "\"target=\"_blank\">阅读更多</a></button></div>\
                                 </div>\
                                 </div>\
                                 </br></br></br></br></li>"+document.getElementById("info-list").innerHTML;
@@ -256,19 +267,26 @@
         right: 0;
         height: 100%;
         overflow: auto;
-        width: 320px;
+        width: 400px;
         z-index: 999;
         border-left: 1px solid #eaeaea;
         background: #fff;
     }
-    #info-list li.selected {
-        background: green;
+    #info-list {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+    #info-list li {
+        list-style: none;
+        margin: 0 auto;
     }
     .card {
         box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
         transition: 0.3s;
         width: 300px;
         border-radius: 5px;
+        align-content: center;
     }
 
     .card:hover {
