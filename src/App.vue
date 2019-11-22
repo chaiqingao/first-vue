@@ -3,11 +3,11 @@
         <el-amap vid="AMapDemo" :amap-manager="amapManager" :events="mapEvents" :zoom="zoom" class="amap-demo">
             <el-amap-marker v-for="(marker, index) in markers" :position="marker.position" :events="marker.events" :title="marker.title" :icon="marker.icon" :visible="marker.visible" :draggable="marker.draggable" :vid="index"></el-amap-marker>
             <el-amap-marker :position="marker.position" :icon="marker.icon"></el-amap-marker>
-            <div id="timeLine" style="height: 10%">
+            <div id="timeLine" style="height: 20%">
                 <ul id="yearList">
                 </ul>
-            </div>
             <div class="dotted-line"></div>
+            </div>
         </el-amap>
         <div id="info-panel" class="scrollbar1">
             <h1 style="font-family: '楷体'; text-align: center">大事记</h1>
@@ -208,7 +208,6 @@
                     
                 })
             }
-            getNextPoint();
             self.$http.post('api/events/getAll', {},{}).then((response) => {
                 var res = response.body;
                 console.log(res);
@@ -228,6 +227,7 @@
                     });
                     });
             })
+            getNextPoint();
         },
             
         mounted() {
@@ -262,7 +262,7 @@
     }
     #AMapDemo {
         position: relative;
-        height: 90%;
+        height: 80%;
         width: 100%;
     }
     #info-panel {
